@@ -8,8 +8,6 @@ This is my "one evening" take on this issue.
 ## Requirements:
 ### MacOS
   - brew installed
-  - pip3 installed
-
 
 ## Torrent client compatibility:
 - qbittorrent
@@ -26,7 +24,6 @@ and follow the steps.
 
 ## Caveats:
 ### MacOS
-  - installs python-qbittorent via pip globaly, not in venv
   - installs duti command
 
 
