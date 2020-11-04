@@ -7,27 +7,28 @@ This is my "one evening" take on this issue.
 
 ## Requirements:
 ### MacOS
-  - brew installed
+  - brew installed beforehand
+
+## Caveats:
+### MacOS
+  - installs duti if not present
+### Linux
+  - installs curl if nto present
 
 ## Torrent client compatibility:
 - qbittorrent
 
-## OS compatibility:
+## Tested on:
 - MacOS Catalina (didn't try any other MacOS version)
+- Debian 10 with XFCE ( should work on other distros and DEs)
 
 
 ## How to:
 run:
-`chmod +x ./macos_installer.sh && ./macos_installer.sh`
+`chmod +x ./installer.sh && ./installer.sh`
 and follow the steps.
 
 
-## Caveats:
-### MacOS
-  - installs duti command
-
-
 ## TODO (which I might or might not do):
-- create "installer" for Linux
 - add more tests and error handling, as the script is quite straightforward
 - make it work with more torrent clients
