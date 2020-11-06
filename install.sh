@@ -5,6 +5,7 @@ NC='\033[0m' # No Color
 BOLD='\033[1m' # Bold
 PLATFORM=$(uname)
 APP_NAME="Remote_magnet_handler"
+COMPATIBLE_CLIENTS="qbittorrent transmission"
 
 
 ####FC START
@@ -89,6 +90,13 @@ configure_macos_magnet_association () {
 
 configure_torrent_client () {
 
+  export PS3="Choose number: "
+  printf "${BOLD}Pick torrent client you want to use${NC}:\n"
+  select CLIENT in ${COMPATIBLE_CLIENTS}
+  do
+    break
+  done
+
   printf "\n\n${BOLD}Specify installation path where you want scripts to be created, leave empty to use default ${GREEN}(defaults to $HOME/software/${APP_NAME})${NC}:\n"
   read install_path
   install_path=${install_path:-"$HOME/software/$APP_NAME"}
@@ -96,7 +104,7 @@ configure_torrent_client () {
   printf "\n${BOLD}Specify URL of your remote qBittorrent instance ${GREEN}(example: http(s)://192.168.1.200:8080)${NC}:\n"
   read url
 
-  printf "\n${BOLD}Specify username and password, leave empty when using '${GREEN}Bypass from localhost/whitelisted IPs${NC}' ${BOLD}option${NC}:\n"
+  printf "\n${BOLD}Specify username and password, leave both empty when using '${GREEN}Bypass from whitelisted IPs/Auth disabled${NC}' ${BOLD}options${NC}:\n"
   printf "${BOLD}Input username:${NC}\n"
   read username
   printf "${BOLD}Input password:${NC}\n"
@@ -114,17 +122,14 @@ USER=$username
 PASSWORD=$password
 EOF
 
-  if [ ! -z "$username" ] && [ ! -z "$password" ] ; then
-    cat <<EOF >> ${install_path}/adder.sh
-sid=\$(curl -s -i --header "Referer: \$URL" --data "username=\${USER}&password=\${PASSWORD}" \${URL}/api/v2/auth/login | sed -nE "s/.*(SID=.*); HttpOnly.*/\1/p")
-curl --cookie "\$sid" --data "urls=\${TORRENT}" \${URL}/api/v2/torrents/add
-curl \${URL}/logout --cookie "\$sid"
-EOF
-  else
-    cat <<EOF >> ${install_path}/adder.sh
-curl --data "urls=\${TORRENT}" \${URL}/api/v2/torrents/add
-EOF
-  fi
+  case $CLIENT in
+    qbittorrent)
+      source templates/qbittorrent.template
+      ;;
+    transmission)
+      source templates/transmission.template
+      ;;
+  esac
 
   chmod +x ${install_path}/adder.sh
 

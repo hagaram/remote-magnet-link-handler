@@ -16,7 +16,8 @@ This is my "one evening" take on this issue.
   - installs curl if nto present
 
 ## Torrent client compatibility:
-- qbittorrent
+- qbittorrent (tested on v.4.1.9.1
+- transmission (tested on v.3.0.0)
 
 ## Tested on:
 - MacOS Catalina (didn't try any other MacOS version)

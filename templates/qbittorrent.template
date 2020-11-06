@@ -1,0 +1,11 @@
+  if [ ! -z "$username" ] && [ ! -z "$password" ] ; then
+    cat <<EOF >> ${install_path}/adder.sh
+sid=\$(curl -s -i --header "Referer: \$URL" --data "username=\${USER}&password=\${PASSWORD}" \${URL}/api/v2/auth/login | sed -nE "s/.*(SID=.*); HttpOnly.*/\1/p")
+curl --cookie "\$sid" --data "urls=\${TORRENT}" \${URL}/api/v2/torrents/add
+curl \${URL}/logout --cookie "\$sid"
+EOF
+  else
+    cat <<EOF >> ${install_path}/adder.sh
+curl --data "urls=\${TORRENT}" \${URL}/api/v2/torrents/add
+EOF
+  fi

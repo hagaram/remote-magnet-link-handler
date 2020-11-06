@@ -1,0 +1,11 @@
+  if [ ! -z "$username" ] && [ ! -z "$password" ] ; then
+    cat <<EOF >> ${install_path}/adder.sh
+sid=\$(curl --silent --anyauth --user \$USER:\$PASSWORD "\$URL/transmission/rpc" | sed 's/.*<code>//g;s/<\/code>.*//g')
+curl --silent --anyauth --user \$USER:\$PASSWORD --header "\$sid" "\$URL/transmission/rpc" --data "{\"method\":\"torrent-add\",\"arguments\":{\"filename\":\"\${TORRENT}\"}}"
+EOF
+  else
+    cat <<EOF >> ${install_path}/adder.sh
+sid=\$(curl --silent "\$URL/transmission/rpc" | sed 's/.*<code>//g;s/<\/code>.*//g')
+curl --silent --header "\$sid" "\$URL/transmission/rpc" --data "{\"method\":\"torrent-add\",\"arguments\":{\"filename\":\"\${TORRENT}\"}}"
+EOF
+  fi
