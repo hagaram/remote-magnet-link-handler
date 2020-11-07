@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
 
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
@@ -92,7 +92,7 @@ configure_torrent_client () {
 
   export PS3="Choose number: "
   printf "${BOLD}Pick torrent client you want to use${NC}:\n"
-  select CLIENT in ${COMPATIBLE_CLIENTS}
+  select client in ${COMPATIBLE_CLIENTS}
   do
     break
   done
@@ -122,15 +122,8 @@ USER=$username
 PASSWORD=$password
 EOF
 
-  case $CLIENT in
-    qbittorrent)
-      source templates/qbittorrent.template
-      ;;
-    transmission)
-      source templates/transmission.template
-      ;;
-  esac
 
+  source templates/${client}.template
   chmod +x ${install_path}/adder.sh
 
 
