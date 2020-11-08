@@ -14,10 +14,13 @@ This is my take on this issue.
   - installs duti if not present
 ### Linux
   - installs curl if not present
+### Deluge
+  - expects deluge-web to be connected to deluged service, script doesn't handle this part when adding torrents
 
 ## Torrent client compatibility:
 - qbittorrent (tested on v.4.1.9.1
 - transmission (tested on v.3.0.0)
+- deluge (tested on 1.3.5 --> Without auth bypass, as it is not officialy supported)
 
 ## Tested on:
 - MacOS Catalina (didn't try any other MacOS version)

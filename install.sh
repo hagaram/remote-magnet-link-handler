@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
 GREEN='\033[0;32m'
+RED='\033[0;31m'
 NC='\033[0m' # No Color
 BOLD='\033[1m' # Bold
 PLATFORM=$(uname)
 APP_NAME="Remote_magnet_handler"
-COMPATIBLE_CLIENTS="qbittorrent transmission"
+COMPATIBLE_CLIENTS="qbittorrent transmission deluge"
 
 
 ####FC START
@@ -104,7 +105,7 @@ configure_torrent_client () {
   printf "\n${BOLD}Specify URL of your remote qBittorrent instance ${GREEN}(example: http(s)://192.168.1.200:8080)${NC}:\n"
   read url
 
-  printf "\n${BOLD}Specify username and password, leave both empty when using '${GREEN}Bypass from whitelisted IPs/Auth disabled${NC}' ${BOLD}options${NC}:\n"
+  printf "\n${BOLD}Specify username  (if applicable) and password, leave both empty when using '${GREEN}Bypass from whitelisted IPs/Auth disabled${NC}' ${BOLD}options${NC}:\n"
   printf "${BOLD}Input username:${NC}\n"
   read username
   printf "${BOLD}Input password:${NC}\n"
@@ -123,7 +124,7 @@ PASSWORD=$password
 EOF
 
 
-  source templates/${client}.template
+  source templates/${client}
   chmod +x ${install_path}/adder.sh
 
 

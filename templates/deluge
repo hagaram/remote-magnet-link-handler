@@ -1,0 +1,9 @@
+  if [ ! -z "$password" ] ; then
+    cat <<EOF >> ${install_path}/adder.sh
+sid=\$(curl -s -i -H "Content-Type: application/json" -H "Accept: application/json" -X POST -d "{\"method\": \"auth.login\", \"params\": [\"\${PASSWORD}\"], \"id\": 1}" \${URL}/json | awk '/Set-Cookie/ {print substr(\$2, 1, length(\$2)-1)}')
+curl -s --cookie "\${sid}"  -i -H "Content-Type: application/json" -H "Accept: application/json" -X POST -d  "{\"method\":\"core.add_torrent_magnet\",\"params\":[\"\${TORRENT}\",{}],\"id\":1}" \${URL}/json
+EOF
+  else
+    printf "${RED}You didn't provide password, installation FAILED${NC}"
+    exit 1
+  fi
