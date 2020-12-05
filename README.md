@@ -23,7 +23,9 @@ This is my take on this issue.
 - deluge (tested on 1.3.5 --> Without auth bypass, as it is not officialy supported)
 
 ## Tested on:
-- MacOS Catalina (didn't try any other MacOS version)
+- MacOS Catalina
+- MacOS BigSur
+- Arch with KDE
 - Debian 10 with XFCE ( should work on other distros and DEs)
 
 
