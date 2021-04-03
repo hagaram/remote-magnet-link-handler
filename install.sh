@@ -5,7 +5,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 BOLD='\033[1m' # Bold
 PLATFORM=$(uname)
-APP_NAME="Remote_magnet_handler"
+DEFAULT_APP_NAME="Remote_magnet_handler"
 COMPATIBLE_CLIENTS="qbittorrent transmission deluge"
 
 
@@ -20,7 +20,7 @@ macos_check_reqs () {
   fi
   command -v duti &>/dev/null
   if [ $? -eq 1 ]; then
-    printf "\n${BOLD}Installing duti${NC}\n"
+    printf "\n${BOLD}Installing duti${NC}\n" ${BOLD} ${NC}
     brew install duti
   fi
 }
@@ -51,11 +51,11 @@ linux_check_reqs() {
 
 
 create_linux_middleware_app () {
-  printf "${BOLD}Creating ${APP_NAME}.desktop entry${NC}\n"
-  mkdir -p $HOME/.local/share/applications/
-  cat <<EOF > ${HOME}/.local/share/applications/${APP_NAME}.desktop
+  printf "${BOLD}Creating ${app_name}.desktop entry${NC}\n"
+  mkdir -p ${HOME}/.local/share/applications/
+  cat <<EOF > ${HOME}/.local/share/applications/${app_name}.desktop
 [Desktop Entry]
-Name=${APP_NAME}
+Name=${app_name}
 Type=Application
 Exec=${install_path}/adder.sh %u
 NoDisplay=true
@@ -67,20 +67,20 @@ EOF
 
 configure_linux_magnet_association () {
   printf "${BOLD}Assigning association with magnet links${NC}\n"
-  xdg-mime default ${APP_NAME}.desktop x-scheme-handler/magnet
+  xdg-mime default ${app_name}.desktop x-scheme-handler/magnet
 }
 
 
 create_macos_middleware_app () {
-  printf "${BOLD}Creating ${APP_NAME}.app${NC}"
-  cat <<EOF > ${install_path}/${APP_NAME}.scpt
+  printf "${BOLD}Creating ${app_name}.app${NC}"
+  cat <<EOF > ${install_path}/${app_name}.scpt
 on open location this_URL
 	do shell script "${install_path}/adder.sh '" & this_URL & "'"
 end open location
 EOF
 
-  osacompile -o /Applications/${APP_NAME}.app ${install_path}/${APP_NAME}.scpt
-  perl -i -pe 's/(^\s+<key>LSMinimumSystemVersionByArchitecture<\/key>)/\t<key>CFBundleIdentifier<\/key>\n\t<string>com.apple.ScriptEditor.id.Remote-magnet-handler<\/string>\n$1/'  /Applications/${APP_NAME}.app/Contents/Info.plist
+  osacompile -o /Applications/${app_name}.app ${install_path}/${app_name}.scpt
+  perl -i -pe 's/(^\s+<key>LSMinimumSystemVersionByArchitecture<\/key>)/\t<key>CFBundleIdentifier<\/key>\n\t<string>com.apple.ScriptEditor.id.Remote-magnet-handler<\/string>\n$1/'  /Applications/${app_name}.app/Contents/Info.plist
 }
 
 
@@ -98,9 +98,14 @@ configure_torrent_client () {
     break
   done
 
-  printf "\n\n${BOLD}Specify installation path where you want scripts to be created, leave empty to use default ${GREEN}(defaults to $HOME/software/${APP_NAME})${NC}:\n"
+
+  printf "\n\n${BOLD}Specify application name you wish to use, leave empty to use default ${GREEN}(defaults to ${DEFAULT_APP_NAME})${NC}:\n"
+  read app_name
+  app_name=${app_name:-"${DEFAULT_APP_NAME}"}
+
+  printf "\n\n${BOLD}Specify installation path where you want scripts to be created, leave empty to use default ${GREEN}(defaults to ${HOME}/software/${app_name})${NC}:\n"
   read install_path
-  install_path=${install_path:-"$HOME/software/$APP_NAME"}
+  install_path=${install_path:-"$HOME/software/$app_name"}
 
   printf "\n${BOLD}Specify URL of your remote qBittorrent instance ${GREEN}(example: http(s)://192.168.1.200:8080)${NC}:\n"
   read url
@@ -139,6 +144,7 @@ main () {
       ;;
     Linux)
       linux_check_reqs
+    ;;
   esac
   
   configure_torrent_client
